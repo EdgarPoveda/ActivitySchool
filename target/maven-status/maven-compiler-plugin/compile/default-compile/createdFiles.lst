@@ -1,0 +1,7 @@
+co\activityschool\config\entityServiceConfig.class
+co\activityschool\entities\Actividad.class
+co\activityschool\entities\TipoActividades.class
+co\activityschool\entities\Rol.class
+co\activityschool\config\SwaggerConfig.class
+co\activityschool\ActivitySchoolApplication.class
+co\activityschool\entities\Usuario.class
