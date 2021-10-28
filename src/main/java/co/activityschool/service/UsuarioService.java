@@ -19,6 +19,8 @@ public class UsuarioService {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private RolService rolService;
+	
+	private final int TAMANIO_CONTRASENIA = 8;
 
 	public List<Usuario> obtenerUsuarios() throws Exception {
 		List<Usuario> usuarios = usuarioRepository.findAll();
@@ -51,6 +53,7 @@ public class UsuarioService {
 		usuario.setFechaCreacion(new Date());
 		usuario.setIdentificacionUsuario(usuarioCrearRequest.getIdentificacionUsuario());
 		usuario.setIdUsuarioAutomatico(UUID.randomUUID().toString());
+		usuario.setContraseniaUsuario(contraseniaAutomatica(TAMANIO_CONTRASENIA));
 		usuario.setNombreUsuario(usuarioCrearRequest.getNombreUsuario());
 		usuario.setRol(rolService.obtenerRolPorId(usuarioCrearRequest.getIdRol()));
 		return usuarioRepository.save(usuario);
@@ -62,6 +65,16 @@ public class UsuarioService {
 			return usuario;
 		}
 		throw new Exception("Token no encontrado");
+	}
+
+	static String contraseniaAutomatica(int n) {
+		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz";
+		StringBuilder sb = new StringBuilder(n);
+		for (int i = 0; i < n; i++) {
+			int index = (int) (AlphaNumericString.length() * Math.random());
+			sb.append(AlphaNumericString.charAt(index));
+		}
+		return sb.toString();
 	}
 
 }
