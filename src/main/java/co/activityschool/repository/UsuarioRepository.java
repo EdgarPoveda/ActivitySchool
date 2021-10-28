@@ -9,4 +9,6 @@ import co.activityschool.entities.Usuario;
 public interface  UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 	public Usuario findByIdentificacionUsuario(String identificacionUsuario);
+	
+	public Usuario findByIdUsuarioAutomatico(String idUsuarioAutomatico);
 }

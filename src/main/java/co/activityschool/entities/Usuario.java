@@ -27,9 +27,8 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
 	private Long idUsuario;
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
 	@Column(name = "id_usuario_automatico")
-	private Long idUsuarioAutomatico;
+	private String idUsuarioAutomatico;
 	@Column(name = "nombre_usuario", length = 30)
 	private String nombreUsuario;
 	@Column(name = "cargo_usuario", length = 30)
@@ -45,5 +44,5 @@ public class Usuario {
 	private Rol rol;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario")
-	private List<Actividad> actividades;
-}
+	private List<Actividad> actividades; 
+}	
