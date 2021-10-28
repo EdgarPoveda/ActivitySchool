@@ -55,7 +55,8 @@ public class UsuarioController {
 	private ResponseEntity<?> login(@RequestBody UsuarioLogin usuarioLogin) {
 		Map response = new HashMap();
 		try {
-			return new ResponseEntity<>(usuarioService.login(usuarioLogin), HttpStatus.OK);
+			response.put("token", usuarioService.login(usuarioLogin));
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception ex) {
 			response.put("error", ex.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -71,8 +72,7 @@ public class UsuarioController {
 	private ResponseEntity<?> usuarioPorToken(@PathVariable String token) {
 		Map response = new HashMap();
 		try {
-			response.put("token", entidadToConverter.convertirUsuario(usuarioService.usuarioPorIdAutomatico(token)));
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity<>(entidadToConverter.convertirUsuario(usuarioService.usuarioPorIdAutomatico(token)), HttpStatus.OK);
 		} catch (Exception ex) {
 			response.put("error", ex.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
