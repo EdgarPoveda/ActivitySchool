@@ -15,6 +15,7 @@ import co.activityschool.service.RolService;
 import co.activityschool.util.EntidadToConverter;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class RolController {
 	
 	@Autowired
