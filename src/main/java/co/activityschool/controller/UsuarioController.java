@@ -55,8 +55,7 @@ public class UsuarioController {
 	private ResponseEntity<?> login(@RequestBody UsuarioLogin usuarioLogin) {
 		Map response = new HashMap();
 		try {
-			response.put("token", usuarioService.login(usuarioLogin));
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity<>(usuarioService.login(usuarioLogin), HttpStatus.OK);
 		} catch (Exception ex) {
 			response.put("error", ex.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
