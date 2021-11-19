@@ -29,6 +29,8 @@ public class Actividad {
 	private Date fechaCreacionActividad;
 	@Column(name = "estado_actividad")
 	private Boolean estadoActividad;
+	@Column(name = "descripcion_actividad", length = 300)
+	private String descripcionActividad;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;

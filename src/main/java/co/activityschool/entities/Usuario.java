@@ -39,6 +39,9 @@ public class Usuario {
 	private String identificacionUsuario;
 	@Column(name = "contrasenia_usuario", length = 30)
 	private String contraseniaUsuario;
+	@Column(name = "cambio_contrasenia")
+	private Boolean cambioContrasenia;
+	
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Rol rol;

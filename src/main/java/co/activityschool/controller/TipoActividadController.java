@@ -14,49 +14,47 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.activityschool.dto.RolCrearRequest;
-import co.activityschool.dto.RolResponse;
-import co.activityschool.service.RolService;
+import co.activityschool.dto.TipoActividadResponse;
+import co.activityschool.dto.TipoActividadesRequest;
+import co.activityschool.service.TipoActividadService;
 import co.activityschool.util.EntidadToConverter;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class RolController {
+public class TipoActividadController {
+
+	@Autowired
+	private TipoActividadService tipoActividadService;
 	
 	@Autowired
-	private RolService rolService;
-	
-	@Autowired 
 	private EntidadToConverter entidadToConverter;
 	
-	@GetMapping(value = "roles")
-	private List<RolResponse> obtenerRoles(){
-		return entidadToConverter.convertirRoles(rolService.obtenerRoles());
+	@GetMapping(value = "tipoactividades")
+	public List<TipoActividadResponse> obtenerTipoActividades(){
+		return entidadToConverter.convertirTipoActividades(tipoActividadService.obtenerTipoActividad());
 	}
 	
-	@GetMapping(value = "roles/{id}")
-	private ResponseEntity<?> obtenerRolPorId(@PathVariable Long id) {
+	@GetMapping(value = "tipoactividades/{id}")
+	public ResponseEntity<?> obtenerTipoActividadPorId(@PathVariable Long id){
 		Map response = new HashMap();
 		try {
-			RolResponse rolResponse = entidadToConverter.convertirRol(rolService.obtenerRolPorId(id));
-			return new ResponseEntity<>(rolResponse, HttpStatus.OK);
+			TipoActividadResponse tipoActividadResponse = entidadToConverter.convertirTipoActividad(tipoActividadService.obtenerTipoActividadesPorId(id));
+			return new ResponseEntity<>(tipoActividadResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			response.put("error", e.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
-	@PostMapping(value = "rol")
-	private ResponseEntity<?> crearRol(@RequestBody RolCrearRequest rolCrearRequest) {
+	@PostMapping(value = "tipoactividades")
+	public ResponseEntity<?> crearTipoActividades(@RequestBody TipoActividadesRequest tipoActividadesRequest){
 		Map response = new HashMap();
 		try {
-			RolResponse rolResponse = entidadToConverter.convertirRol(rolService.crearRol(rolCrearRequest));
-			return new ResponseEntity<>(rolResponse, HttpStatus.OK);
+			TipoActividadResponse tipoActividadResponse = entidadToConverter.convertirTipoActividad(tipoActividadService.crearTipoActividades(tipoActividadesRequest));
+			return new ResponseEntity<>(tipoActividadResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			response.put("error", e.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 }

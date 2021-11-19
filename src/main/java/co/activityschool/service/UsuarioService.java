@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.activityschool.dto.UsuarioCrearRequest;
+import co.activityschool.dto.UsuarioEstablecerContrasenia;
 import co.activityschool.dto.UsuarioLogin;
 import co.activityschool.entities.Usuario;
 import co.activityschool.repository.UsuarioRepository;
@@ -19,8 +20,9 @@ public class UsuarioService {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private RolService rolService;
-	
+
 	private final int TAMANIO_CONTRASENIA = 8;
+	private final Boolean CAMBIO_CONTRASENIA = false;
 
 	public List<Usuario> obtenerUsuarios() throws Exception {
 		List<Usuario> usuarios = usuarioRepository.findAll();
@@ -31,11 +33,12 @@ public class UsuarioService {
 	}
 
 	public Usuario obtenerUsusarioPorId(Long id) throws Exception {
-		Usuario usuario = usuarioRepository.findById(id).get();
-		if (usuario != null) {
+		try {
+			Usuario usuario = usuarioRepository.findById(id).get();
 			return usuario;
+		} catch (Exception e) {
+			throw new Exception("Usuario no encontrado");
 		}
-		throw new Exception("Usuario no encontrado");
 	}
 
 	public String login(UsuarioLogin usuarioLogin) throws Exception {
@@ -47,16 +50,21 @@ public class UsuarioService {
 
 	}
 
-	public Usuario crearUsuario(UsuarioCrearRequest usuarioCrearRequest) {
-		Usuario usuario = new Usuario();
-		usuario.setCargoUsuario(usuarioCrearRequest.getCargoUsuario());
-		usuario.setFechaCreacion(new Date());
-		usuario.setIdentificacionUsuario(usuarioCrearRequest.getIdentificacionUsuario());
-		usuario.setIdUsuarioAutomatico(UUID.randomUUID().toString());
-		usuario.setContraseniaUsuario(contraseniaAutomatica(TAMANIO_CONTRASENIA));
-		usuario.setNombreUsuario(usuarioCrearRequest.getNombreUsuario());
-		usuario.setRol(rolService.obtenerRolPorId(usuarioCrearRequest.getIdRol()));
-		return usuarioRepository.save(usuario);
+	public Usuario crearUsuario(UsuarioCrearRequest usuarioCrearRequest) throws Exception {
+		try {
+			Usuario usuario = new Usuario();
+			usuario.setCargoUsuario(usuarioCrearRequest.getCargoUsuario());
+			usuario.setFechaCreacion(new Date());
+			usuario.setIdentificacionUsuario(usuarioCrearRequest.getIdentificacionUsuario());
+			usuario.setIdUsuarioAutomatico(UUID.randomUUID().toString());
+			usuario.setContraseniaUsuario(contraseniaAutomatica(TAMANIO_CONTRASENIA));
+			usuario.setNombreUsuario(usuarioCrearRequest.getNombreUsuario());
+			usuario.setRol(rolService.obtenerRolPorId(usuarioCrearRequest.getIdRol()));
+			usuario.setCambioContrasenia(CAMBIO_CONTRASENIA);
+			return usuarioRepository.save(usuario);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	public Usuario usuarioPorIdAutomatico(String token) throws Exception {
@@ -67,7 +75,19 @@ public class UsuarioService {
 		throw new Exception("Token no encontrado");
 	}
 
-	static String contraseniaAutomatica(int n) {
+	public Usuario actualizarContrasenia(UsuarioEstablecerContrasenia usuarioEstablecerContrasenia) throws Exception {
+		try{
+			Usuario usuario = obtenerUsusarioPorId(usuarioEstablecerContrasenia.getIdUsuario());
+			if(usuario.getCambioContrasenia())throw new Exception("Contraseña establecida previamente");
+			usuario.setContraseniaUsuario(usuarioEstablecerContrasenia.getContraseniaUsuario());
+			usuario.setCambioContrasenia(!CAMBIO_CONTRASENIA);
+			return usuarioRepository.save(usuario);
+		}catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private static String contraseniaAutomatica(int n) {
 		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz";
 		StringBuilder sb = new StringBuilder(n);
 		for (int i = 0; i < n; i++) {

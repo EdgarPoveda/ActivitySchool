@@ -1,7 +1,6 @@
 package co.activityschool.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.activityschool.dto.UsuarioCrearRequest;
+import co.activityschool.dto.UsuarioEstablecerContrasenia;
 import co.activityschool.dto.UsuarioLogin;
 import co.activityschool.dto.UsuarioResponse;
 import co.activityschool.service.UsuarioService;
@@ -64,8 +64,16 @@ public class UsuarioController {
 	}
 
 	@PostMapping(value = "usuarios")
-	private UsuarioResponse crearUsuario(@RequestBody UsuarioCrearRequest usuarioCrearRequest) {
-		return entidadToConverter.convertirUsuario(usuarioService.crearUsuario(usuarioCrearRequest));
+	private ResponseEntity<?> crearUsuario(@RequestBody UsuarioCrearRequest usuarioCrearRequest) {
+		Map response = new HashMap();
+		try {
+			UsuarioResponse usuarioResponse = entidadToConverter.convertirUsuario(usuarioService.crearUsuario(usuarioCrearRequest));
+			return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
+		} catch (Exception ex) {
+			response.put("error", ex.getMessage());
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	@GetMapping(value = "usuario/{token}")
@@ -73,6 +81,17 @@ public class UsuarioController {
 		Map response = new HashMap();
 		try {
 			return new ResponseEntity<>(entidadToConverter.convertirUsuario(usuarioService.usuarioPorIdAutomatico(token)), HttpStatus.OK);
+		} catch (Exception ex) {
+			response.put("error", ex.getMessage());
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping(value = "usuario/establecercontrasenia")
+	public ResponseEntity<?> cambiarContrasenia(@RequestBody UsuarioEstablecerContrasenia usuarioEstablecerContrasenia){
+		Map response = new HashMap();
+		try {
+			return new ResponseEntity<>(entidadToConverter.convertirUsuario(usuarioService.actualizarContrasenia(usuarioEstablecerContrasenia)), HttpStatus.OK);
 		} catch (Exception ex) {
 			response.put("error", ex.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

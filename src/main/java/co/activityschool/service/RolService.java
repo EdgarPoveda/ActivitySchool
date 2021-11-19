@@ -20,8 +20,12 @@ public class RolService {
 		return rolRepository.findAll();
 	}
 	
-	public Rol obtenerRolPorId(Long id) {
-		return rolRepository.findById(id).get();
+	public Rol obtenerRolPorId(Long id) throws Exception {
+		try{Rol rol = rolRepository.findById(id).get();
+		return rol;}catch (Exception e) {
+			throw new Exception("Rol no encontrado");
+		}
+		
 	}
 	
 	public Rol crearRol(RolCrearRequest rolCrearRequest) {
