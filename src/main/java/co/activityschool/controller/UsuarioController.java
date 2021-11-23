@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.activityschool.dto.UsuarioCrearRequest;
+import co.activityschool.dto.UsuarioCrearResponse;
 import co.activityschool.dto.UsuarioEstablecerContrasenia;
 import co.activityschool.dto.UsuarioLogin;
 import co.activityschool.dto.UsuarioResponse;
@@ -67,8 +68,8 @@ public class UsuarioController {
 	private ResponseEntity<?> crearUsuario(@RequestBody UsuarioCrearRequest usuarioCrearRequest) {
 		Map response = new HashMap();
 		try {
-			UsuarioResponse usuarioResponse = entidadToConverter.convertirUsuario(usuarioService.crearUsuario(usuarioCrearRequest));
-			return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
+			UsuarioCrearResponse usuarioCrearResponse = entidadToConverter.convertirUsuarioCrear(usuarioService.crearUsuario(usuarioCrearRequest));
+			return new ResponseEntity<>(usuarioCrearResponse, HttpStatus.OK);
 		} catch (Exception ex) {
 			response.put("error", ex.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

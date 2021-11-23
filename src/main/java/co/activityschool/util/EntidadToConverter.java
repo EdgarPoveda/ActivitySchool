@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import co.activityschool.dto.ActividadResponse;
 import co.activityschool.dto.RolResponse;
 import co.activityschool.dto.TipoActividadResponse;
+import co.activityschool.dto.UsuarioCrearResponse;
 import co.activityschool.dto.UsuarioResponse;
 import co.activityschool.entities.Actividad;
 import co.activityschool.entities.Rol;
@@ -33,6 +34,10 @@ public class EntidadToConverter {
 	
 	public UsuarioResponse convertirUsuario(Usuario usuario) {
 		return modelMaper.map(usuario, UsuarioResponse.class);
+	}
+	
+	public UsuarioCrearResponse convertirUsuarioCrear (Usuario usuario) {
+		return modelMaper.map(usuario, UsuarioCrearResponse.class); 
 	}
 	
 	public List<UsuarioResponse> convertirUsuarios(List<Usuario> usuarios) {
