@@ -16,6 +16,7 @@ public class UsuarioResponse {
 	private String cargoUsuario;
 	private Date fechaCreacion;
 	private String identificacionUsuario;
+	private Boolean cambioContrasenia;
 	
 	private RolResponse rol;
 }
