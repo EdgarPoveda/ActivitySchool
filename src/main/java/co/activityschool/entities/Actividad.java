@@ -29,7 +29,7 @@ public class Actividad {
 	private Date fechaCreacionActividad;
 	@Column(name = "estado_actividad")
 	private Boolean estadoActividad;
-	@Column(name = "descripcion_actividad", length = 300)
+	@Column(name = "descripcion_actividad", length = 600)
 	private String descripcionActividad;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
